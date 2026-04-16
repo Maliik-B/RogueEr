@@ -1,0 +1,25 @@
+{
+  "name": "rogueer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Multiplayer roguelike Texas Hold'em with mutable rules and democratic voting",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev:server": "pnpm --filter @rogueer/server dev",
+    "dev:client": "pnpm --filter @rogueer/client dev",
+    "dev": "pnpm dev:server & pnpm dev:client",
+    "clean": "pnpm -r clean"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "msgpackr-extract"
+    ]
+  }
+}
