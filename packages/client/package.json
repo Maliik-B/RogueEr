@@ -1,0 +1,20 @@
+{
+  "name": "@rogueer/client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@rogueer/shared": "workspace:*",
+    "colyseus.js": "^0.16.22",
+    "phaser": "^4.0.0"
+  },
+  "devDependencies": {
+    "vite": "^8.0.8"
+  }
+}
