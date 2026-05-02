@@ -1,0 +1,12 @@
+export const BG_DARK = "#1a1a2e";
+export const BG_PANEL = "#16213e";
+export const TABLE_FELT = "#0f3460";
+export const ACCENT_RED = "#e94560";
+export const TEXT_LIGHT = "#e0e0e0";
+export const TEXT_DIM = "#6a6a8a";
+export const TEXT_WHITE = "#ffffff";
+export const GOLD = "#ffd700";
+export const GREEN = "#4ade80";
+export const RED_DIM = "#b91c1c";
+export const CARD_BACK = "#0f3460";
+export const CARD_FACE = "#16213e";
