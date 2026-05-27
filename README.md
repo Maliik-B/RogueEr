@@ -7,6 +7,14 @@ A multiplayer poker game where the rules mutate every round. Players vote on rul
 ![Colyseus](https://img.shields.io/badge/Colyseus-7B68EE?logoColor=white)
 ![Tauri](https://img.shields.io/badge/Tauri-24C8D8?logo=tauri&logoColor=white)
 
+---
+
+![Lobby](screenshots/lobby.png)
+
+*Game lobby with configurable blinds, timers, voting modes, and player capacity. The host sees a real-time roster, settings panel, and ready/start controls.*
+
+---
+
 ## How It Works
 
 Standard Texas Hold'em, but between betting rounds players vote on **rule mutations** drawn from a pool of 30 rules across three categories:
@@ -31,10 +39,43 @@ packages/
 
 All game logic lives in `shared/` as pure functions, used by both server and client. The server is authoritative -- it orchestrates phases, validates actions, and syncs state via Colyseus schemas with per-client visibility (your hole cards are hidden from other players).
 
+### Round flow (14-phase state machine)
+
+```
+LOBBY ─→ ROUND_START ─→ DEAL
+                          │
+                          ▼
+                    PRE_FLOP_BET ──(all but one folded?)──┐
+                          │                               │
+                          ▼                               │
+                       VOTING_1                           │
+                          │                               │
+                          ▼                               │
+                        FLOP ─→ FLOP_BET ─────────────────┤
+                          │                               │
+                          ▼                               │
+                       VOTING_2                           │
+                          │                               │
+                          ▼                               │
+                        TURN ─→ TURN_BET ─────────────────┤
+                          │                               │
+                          ▼                               │
+                       RIVER ─→ RIVER_BET ────────────────┤
+                          │                               │
+                          ▼                               │
+                      SHOWDOWN ─────────────────────────→ ROUND_END
+                                                          │
+                                                          ▼
+                                                     (next ROUND_START)
+```
+
+Interactive phases (`*_BET`, `VOTING_*`, `LOBBY`) wait on player actions or timeouts. Non-interactive phases (`DEAL`, `FLOP`, `TURN`, `RIVER`, `ROUND_END`) auto-advance after a short pause for client animation. Full diagram with timer rules, betting state transitions, and voting modes lives in [`docs/01-game-state-machine.md`](docs/01-game-state-machine.md).
+
 ### Key Systems
 
-- **4-Stage Evaluation Pipeline** -- hierarchy reorder, card transform, composition modify, then evaluate. Rules compose cleanly without special-casing.
+- **4-Stage Evaluation Pipeline** -- hierarchy reorder, card transform, composition modify, then evaluate. Rules compose cleanly without special-casing. See [`docs/02-rule-engine.md`](docs/02-rule-engine.md).
 - **14-Phase State Machine** -- Deal, betting rounds, voting rounds, showdown, and round end, with auto-advance for non-interactive phases.
+- **Per-Client Schema Visibility** -- Colyseus `@filter()` decorators hide each player's hole cards from other clients; the server holds the complete state. See [`docs/03-colyseus-schema.md`](docs/03-colyseus-schema.md).
 - **Seeded RNG** -- Mulberry32 PRNG for reproducible shuffles and rule draws.
 - **Side Pots** -- Multi-level side pot creation on all-in with proper odd-chip distribution.
 - **Spectator Support** -- Join mid-game, queue for a seat, delayed hole card reveal.
