@@ -9,9 +9,9 @@ A multiplayer poker game where the rules mutate every round. Players vote on rul
 
 ---
 
-![Lobby](screenshots/lobby.png)
+![Gameplay](screenshots/gameplay.gif)
 
-*Game lobby with configurable blinds, timers, voting modes, and player capacity. The host sees a real-time roster, settings panel, and ready/start controls.*
+*Lobby → Pre-Flop round 1 → Voting on rule mutations → Pre-Flop round 2 with the new ruleset active.*
 
 ---
 
@@ -24,6 +24,13 @@ Standard Texas Hold'em, but between betting rounds players vote on **rule mutati
 - **Composition** -- Change what counts as a hand (three-card flushes, full house lite, hole-card-only straights)
 
 Each round has 3 active rule slots. Players vote to **solidify**, **delete**, or **replace** rules, creating an evolving meta-game on top of the poker.
+
+### Screens
+
+| | |
+|---|---|
+| ![Table](screenshots/table.png) | ![Voting](screenshots/voting.png) |
+| Pre-flop betting with hole cards visible (yours only), pot tracking, active rule slots, and turn timer | Voting UI with the three active rules and Solidify / Delete / Replace / Abstain actions per slot |
 
 ## Architecture
 
@@ -75,7 +82,7 @@ Interactive phases (`*_BET`, `VOTING_*`, `LOBBY`) wait on player actions or time
 
 - **4-Stage Evaluation Pipeline** -- hierarchy reorder, card transform, composition modify, then evaluate. Rules compose cleanly without special-casing. See [`docs/02-rule-engine.md`](docs/02-rule-engine.md).
 - **14-Phase State Machine** -- Deal, betting rounds, voting rounds, showdown, and round end, with auto-advance for non-interactive phases.
-- **Per-Client Schema Visibility** -- Colyseus `@filter()` decorators hide each player's hole cards from other clients; the server holds the complete state. See [`docs/03-colyseus-schema.md`](docs/03-colyseus-schema.md).
+- **Per-Client Schema Visibility** -- Hole cards ship as a direct server-to-client message, not in the synced state; only a sanitized `holeCardCount` is in the schema, used to render face-down cards for opponents. See [`docs/03-colyseus-schema.md`](docs/03-colyseus-schema.md).
 - **Seeded RNG** -- Mulberry32 PRNG for reproducible shuffles and rule draws.
 - **Side Pots** -- Multi-level side pot creation on all-in with proper odd-chip distribution.
 - **Spectator Support** -- Join mid-game, queue for a seat, delayed hole card reveal.
@@ -97,4 +104,4 @@ pnpm --filter client dev   # Start Vite dev server
 
 ## License
 
-All rights reserved.
+All rights reserved. See [LICENSE](LICENSE).
