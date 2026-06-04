@@ -1,6 +1,6 @@
 import { Room, Client } from "colyseus";
 import type {
-  Card, GamePhase, Rule, EvaluatedHand, BettingRoundState, BlindPostResult,
+  Card, GamePhase, Rule, EvaluatedHand, BettingRoundState, BlindPostResult, BettingAction,
 } from "@rogueer/shared";
 import {
   getCurrentPlayerId,
@@ -377,10 +377,10 @@ export class GameRoom extends Room<GameState> {
     if (!currentId) return;
 
     const valid = getValidActions(this.bettingState);
-    const action = valid.canCheck ? "check" : "fold";
+    const action: BettingAction = valid.canCheck ? "check" : "fold";
 
     try {
-      const newState = applyAction(this.bettingState, action as any);
+      const newState = applyAction(this.bettingState, action);
       this.bettingState = newState;
       this.syncBettingStateToSchema();
 
