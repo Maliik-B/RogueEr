@@ -1,6 +1,9 @@
 import type { Card, HandType, EvaluatedHand, AnnotatedCard, DetectionConfig } from "./types.js";
 import { DEFAULT_HAND_RANKINGS, DEFAULT_DETECTION_CONFIG } from "./constants.js";
 
+// Ace-low ("wheel") straight: A counts as 1, expressed as {5,4,3,2,A=14}.
+const WHEEL_VALUES = [5, 4, 3, 2, 14] as const;
+
 // ============================================================
 // Types
 // ============================================================
@@ -128,22 +131,13 @@ function findStraightHigh(
     }
   }
 
-  // Ace-low straight (5-4-3-2-A) — only if ace-high is allowed or ace-low is always valid
-  if (config.straightAceHigh || !config.straightAceHigh) {
-    // Ace-low is always valid unless F07 specifically disables ace-high (ace-low is still OK)
-    if (minCards === 5 && uniqueVals.has(14) && uniqueVals.has(2) && uniqueVals.has(3) && uniqueVals.has(4) && uniqueVals.has(5)) {
-      return 5;
-    }
-    if (minCards === 6 && uniqueVals.has(14) && uniqueVals.has(2) && uniqueVals.has(3) && uniqueVals.has(4) && uniqueVals.has(5) && uniqueVals.has(6)) {
-      return 6;
-    }
+  // Ace-low straight (wheel): A counts as 1. Always valid; F07 only disables ace-high.
+  if (minCards === 5 && uniqueVals.has(14) && uniqueVals.has(2) && uniqueVals.has(3) && uniqueVals.has(4) && uniqueVals.has(5)) {
+    return 5;
   }
-
-  // If ace-high is disabled (F07), we need to re-check without ace-high straights
-  // The regular check above already found ace-high straights, so we need to exclude them
-  // Actually, if ace is high (value 14) and straightAceHigh is false,
-  // we should not allow straights that use ace as 14 (e.g., A-K-Q-J-T)
-  // The ace-low check above already handles the allowed case.
+  if (minCards === 6 && uniqueVals.has(14) && uniqueVals.has(2) && uniqueVals.has(3) && uniqueVals.has(4) && uniqueVals.has(5) && uniqueVals.has(6)) {
+    return 6;
+  }
 
   return -1;
 }
@@ -213,12 +207,7 @@ function detectStraightFlushC(cards: Card[], config: DetectionConfig): HandDetec
     if (high > bestHigh) {
       bestHigh = high;
       if (!config.straightAceHigh && high <= 5 && sorted.some((c) => c.value === 14)) {
-        // Ace-low straight flush
-        const targetVals = [];
-        for (let v = high; v > high - config.straightMinCards; v--) {
-          targetVals.push(v <= 0 ? 14 : v); // map 1 back to 14
-        }
-        // Actually, for ace-low: the cards have value 14 for ace
+        // Ace-low straight flush: cards have value 14 for ace; remap 1 back to 14 on lookup.
         bestCards = [];
         const used = new Set<number>();
         for (let v = high; v > high - config.straightMinCards; v--) {
@@ -227,7 +216,7 @@ function detectStraightFlushC(cards: Card[], config: DetectionConfig): HandDetec
           if (card) { bestCards.push(card); used.add(cardVal); }
         }
       } else if (high === 5 && sorted.some((c) => c.value === 14)) {
-        bestCards = [5, 4, 3, 2, 14].map((v) => sorted.find((c) => c.value === v)!).filter(Boolean);
+        bestCards = WHEEL_VALUES.map((v) => sorted.find((c) => c.value === v)!).filter(Boolean);
       } else {
         bestCards = [];
         for (let v = high; v > high - config.straightMinCards; v--) {
@@ -374,8 +363,7 @@ function detectStraightC(cards: Card[], config: DetectionConfig): HandDetection 
 
   if (high === 5 && sorted.some((c) => c.value === 14)) {
     // Ace-low straight
-    const targetVals = [5, 4, 3, 2, 14];
-    if (minCards === 6) targetVals.unshift(6);
+    const targetVals = minCards === 6 ? [6, ...WHEEL_VALUES] : [...WHEEL_VALUES];
     handCards = targetVals.map((v) => sorted.find((c) => c.value === v)!);
   } else if (!config.straightAceHigh && high <= 5) {
     // Ace remapped to 1
@@ -781,8 +769,8 @@ function canFormStraightWild(nonWilds: Card[], numWilds: number, config: Detecti
     for (const v of lowVals) {
       if (uniqueVals.includes(v)) have++;
     }
-    const needed = (minCards) - have;
-    if (needed <= numWilds + (!hasAce ? 0 : 0)) {
+    const needed = minCards - have;
+    if (needed <= numWilds) {
       return { cards: nonWilds.slice(0, 5), kickers: [minCards === 5 ? 5 : 6] };
     }
   }
