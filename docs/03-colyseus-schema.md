@@ -1,5 +1,9 @@
 # 1.3 — Colyseus Room & Schema Design
 
+> **Status: DESIGN / ROADMAP.** This document describes the intended schema and networking design, not all of which is implemented yet.
+> **Implemented today:** authoritative server, out-of-band hole cards, 14-phase state machine, betting and pot logic, seeded RNG.
+> **Planned, not yet implemented:** `@filter` per-client visibility, reconnection, Redis persistence, replay/audit tables, spectator promotion.
+
 ## Architecture Principle
 
 **Server is authoritative.** The server holds the complete game state — deck order, all hole cards, RNG seeds, vote tallies. Clients receive only what they're allowed to see. Clients send **actions** (intents), the server validates and applies them, and Colyseus auto-syncs the resulting state delta to all clients.
