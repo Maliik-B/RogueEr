@@ -20,6 +20,3 @@ packages/client/src-tauri/target/
 # OS
 Thumbs.db
 .DS_Store
-
-# Local-only working files (not part of the project)
-memory/
