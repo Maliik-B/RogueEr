@@ -21,7 +21,5 @@ packages/client/src-tauri/target/
 Thumbs.db
 .DS_Store
 
-# Claude
-CLAUDE.md
-.claude/
+# Local-only working files (not part of the project)
 memory/
