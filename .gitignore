@@ -20,3 +20,6 @@ packages/client/src-tauri/target/
 # OS
 Thumbs.db
 .DS_Store
+
+# Local working docs
+cdocs/
