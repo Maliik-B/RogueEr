@@ -20,7 +20,7 @@
 ### 1.2 Rule Engine
 - [x] Define rule representation format (data structure)
 - [x] Define rule categories (Hierarchy, Card Property, Composition)
-- [x] Define how rules mutate the hand evaluation hierarchy (3-stage pipeline)
+- [x] Define how rules mutate the hand evaluation hierarchy (4-stage pipeline)
 - [x] Define voting mechanics (solidify, delete, replace + category binding)
 - [x] Define rule slot system (3 slots, category-bound, randomization)
 - [x] Define rule pool (~10 per category, 30 total for launch)
@@ -232,7 +232,7 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 - [ ] Side pot display
 - **Status:** IN PROGRESS (core features complete, 3 items remaining)
 
-- **Status:** Phase 4 core COMPLETE. `pnpm build` passes. NetworkManager, LobbyScene, TableScene, BettingPanel, VotingPanel, RuleDisplay, ShowdownOverlay all implemented. 3 polish items deferred (spectator UI, disconnect overlay, side pot display).
+- **Status:** Phase 4 core COMPLETE. `pnpm build` passes. NetworkManager, LobbyScene, TableScene, BettingPanel, VotingPanel, RuleDisplay and the showdown reveal in TableScene all implemented. 3 polish items deferred (spectator UI, disconnect overlay, side pot display).
 
 ---
 
