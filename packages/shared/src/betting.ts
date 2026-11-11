@@ -1,5 +1,5 @@
 // ============================================================
-// Betting Logic — Blinds, actions, round management
+// Betting Logic: Blinds, actions, round management
 // ============================================================
 
 import type { BettingAction } from "./types.js";
@@ -22,7 +22,7 @@ export interface BettingPlayer {
 
 export interface BettingRoundState {
   players: BettingPlayer[];
-  /** Player IDs in action order (full table — folded/all-in are skipped). */
+  /** Player IDs in action order (full table; folded/all-in are skipped). */
   actionOrder: string[];
   /** Index into actionOrder for the current actor. */
   activePlayerIndex: number;
@@ -377,7 +377,7 @@ export function applyAction(
         minRaise = Math.max(raiseIncrement, state.bigBlind);
         reopenAction(players, playerId);
       } else if (player.currentBet > currentBet) {
-        // Partial raise — updates currentBet but doesn't reopen
+        // Partial raise: updates currentBet but doesn't reopen
         currentBet = player.currentBet;
       }
       // Under-call: no changes to currentBet

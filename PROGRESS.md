@@ -56,7 +56,7 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] Deck creation (52 cards)
 - [x] Fisher-Yates shuffle (seeded RNG for reproducibility, mulberry32 PRNG)
 - [x] Deal N cards from top of deck
-- [x] Unit tests (15 tests)
+- [x] Unit tests
 - **Status:** COMPLETE (see `packages/shared/src/deck.ts`)
 
 ### 2.2 Hand Evaluation Engine
@@ -64,7 +64,7 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] Rank hands with proper tiebreaking (kickers)
 - [x] Compare two evaluated hands to determine winner
 - [x] determineWinners() for multi-player showdown (split pot support)
-- [x] Unit tests for all hand types and edge cases (45 tests)
+- [x] Unit tests for all hand types and edge cases
 - **Status:** COMPLETE (see `packages/shared/src/hand-evaluator.ts`)
 
 ### 2.3 Rule Engine Implementation
@@ -82,7 +82,7 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] AnnotatedCard with source provenance (hole/community) for F04, F05, F09
 - [x] three_card_flush HandType support (F06)
 - [x] Full House Lite 2+2+1 pattern (F10)
-- [x] Unit tests (56 tests: hierarchy, card-property, composition, pipeline integration)
+- [x] Unit tests (hierarchy, card-property, composition, pipeline integration)
 - **Status:** COMPLETE (see `packages/shared/src/rule-engine.ts`, `packages/shared/src/rules/`)
 
 ### 2.4 Pot Calculation
@@ -90,7 +90,7 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] Side pot creation on all-in (multi-level side pots, rollover for all-folded levels)
 - [x] Split pot logic for ties (odd chip distribution)
 - [x] Pot distribution to winner(s) (callback-based getWinners for flexibility)
-- [x] Unit tests (17 tests)
+- [x] Unit tests
 - **Status:** COMPLETE (see `packages/shared/src/pot.ts`)
 
 ### 2.5 Betting Logic
@@ -101,10 +101,10 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] Action order helpers (pre-flop UTG start, post-flop SB start)
 - [x] All-in partial raise does not reopen action (standard Hold'em rule)
 - [x] Round transition helpers (prepareNextRound, getContributions, getFoldedPlayerIds)
-- [x] Unit tests (47 tests)
+- [x] Unit tests
 - **Status:** COMPLETE (see `packages/shared/src/betting.ts`)
 
-- **Status:** COMPLETE. 2.1–2.5 all done (180 total tests). Phase 2 shared game logic finished.
+- **Status:** COMPLETE. 2.1–2.5 all done. Phase 2 shared game logic finished.
 
 ---
 
@@ -114,11 +114,11 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 
 ### 3.1 Colyseus Schemas
 - [x] Expand `GameState` with full fields from `docs/03-colyseus-schema.md` (phase, dealers, timers, collections)
-- [x] `PlayerState` schema (sessionId, displayName, seatIndex, status, chips, currentBet, holeCards, vote)
+- [x] `PlayerState` schema (sessionId, displayName, seatIndex, status, chips, currentBet, holeCardCount, vote)
 - [x] `RuleSlotSchema`, `RuleInfoSchema`, `VotingStateSchema`, `VoteSchema`, `VoteResultSchema`
 - [x] `SidePotSchema`, `LobbySettingsSchema`, `SpectatorSchema`, `CommunityCardSchema`, `CardSchema`
-- [x] Per-client visibility via `@view()` + `StateView` (hole cards owner-only, votes tag-based)
-- [x] `GameRoom.onJoin` wires up `StateView` per client (player vs spectator paths)
+- [x] Hole cards sent only to their owner as a private `your_cards` message, outside the synced state (per-client filtering via `@view()` + `StateView` is planned)
+- [x] `GameRoom.onJoin` splits joiners into players and spectators
 - [x] `GameRoom.onLeave` handles lobby removal vs in-game disconnect
 - [x] Seat assignment, host assignment, spectator lifecycle
 - **Status:** COMPLETE (see `packages/server/src/schema/GameState.ts`)
@@ -158,7 +158,7 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 - **Status:** COMPLETE
 
 ### 3.6 Lobby & Lifecycle
-- [x] `onJoin`: assign seat, set host, handle spectators (queue for seat, hole card delay)
+- [x] `onJoin`: assign seat, set host, add late joiners as spectators (seat queue and hole card delay not built yet)
 - [ ] `onLeave`: reconnect grace period (60s). Deferred, auto-fold on disconnect implemented
 - [x] `onCreate`: initialize state, apply default lobby settings
 - [x] Host `update_settings`, `start_game` (validate min players + all ready)
@@ -265,5 +265,5 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 | 2026-04-16 | Vote resolution lives in GameRoom.resolveVotes() | 3-tier majority algorithm needs access to schema state and rule pool; handler only validates and stores votes |
 | 2026-04-16 | Tie-on-replacement falls back to delete | Replace ties still produce a meaningful outcome (rule removed) rather than no-op |
 | 2026-04-16 | Native setTimeout/setInterval for timers | No Colyseus clock dependency; clearTimers() called on every phase transition prevents stale callbacks |
-| 2026-04-16 | Vote visibility cross-client wiring deferred | Mechanism (VIEW_TAG_VOTE StateView.add()) exists; triggering logic deferred to Phase 5 polish |
+| 2026-04-16 | Vote visibility cross-client wiring deferred | Mechanism (VIEW_TAG_VOTE StateView.add()) is designed but not built; deferred to Phase 5 polish |
 | 2026-04-16 | Reconnection grace period deferred | allowReconnection() not called; disconnect auto-folds; deferred to Phase 5 polish |

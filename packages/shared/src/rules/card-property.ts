@@ -25,21 +25,21 @@ function cloneCard(card: AnnotatedCard, overrides: Partial<AnnotatedCard>): Anno
   return { ...card, ...overrides };
 }
 
-// C01: Deuces Wild — 2s act as wild cards
+// C01 Deuces Wild: 2s act as wild cards
 export const C01 = makeCardPropertyRule(
   "C01", "Deuces Wild", "2s act as wild cards (substitute for any card)", "advanced",
   (cards) => cards.map((c) => c.value === 2 ? cloneCard(c, { isWild: true }) : c),
   ["C09", "C10", "C08"]
 );
 
-// C02: Ace Grounded — Aces count as low only (value 1)
+// C02 Ace Grounded: Aces count as low only (value 1)
 export const C02 = makeCardPropertyRule(
   "C02", "Ace Grounded", "Aces count as low only (value 1, cannot be high)", "standard",
   (cards) => cards.map((c) => c.value === 14 ? cloneCard(c, { value: 1 }) : c),
   ["C06"]
 );
 
-// C03: Face Collapse — J, Q, K all share value 10
+// C03 Face Collapse: J, Q, K all share value 10
 export const C03 = makeCardPropertyRule(
   "C03", "Face Collapse",
   "J, Q, K all share the same value (10). Creates more pairs/trips but breaks some straights",
@@ -51,7 +51,7 @@ export const C03 = makeCardPropertyRule(
   ["C08"]
 );
 
-// C04: Suit Merge Red — Hearts and Diamonds treated as same suit
+// C04 Suit Merge Red: Hearts and Diamonds treated as same suit
 export const C04 = makeCardPropertyRule(
   "C04", "Suit Merge: Red",
   "Hearts and Diamonds are treated as the same suit",
@@ -63,7 +63,7 @@ export const C04 = makeCardPropertyRule(
   ["C05"]
 );
 
-// C05: Suit Merge Black — Spades and Clubs treated as same suit
+// C05 Suit Merge Black: Spades and Clubs treated as same suit
 export const C05 = makeCardPropertyRule(
   "C05", "Suit Merge: Black",
   "Spades and Clubs are treated as the same suit",
@@ -75,7 +75,7 @@ export const C05 = makeCardPropertyRule(
   ["C04"]
 );
 
-// C06: Ace Splits — Each Ace counts as BOTH high and low (best interpretation used)
+// C06 Ace Splits: Each Ace counts as BOTH high and low (best interpretation used)
 // This is handled specially in the rule engine pipeline: evaluate 2^N combinations
 // where N is the number of aces, each ace either value 14 or value 1.
 export const C06: Rule = {
@@ -95,7 +95,7 @@ export const C06: Rule = {
   },
 };
 
-// C07: Middle Strength — 6, 7, 8 promoted to value 12
+// C07 Middle Strength: 6, 7, 8 promoted to value 12
 export const C07 = makeCardPropertyRule(
   "C07", "Middle Strength",
   "6, 7, 8 are promoted: treated as value 12 (between Q and K)",
@@ -107,7 +107,7 @@ export const C07 = makeCardPropertyRule(
   []
 );
 
-// C08: Royal Rags — K=4, Q=3, J=2
+// C08 Royal Rags: K=4, Q=3, J=2
 export const C08 = makeCardPropertyRule(
   "C08", "Royal Rags",
   "K, Q, J are demoted: treated as value 4, 3, 2 respectively",
@@ -121,7 +121,7 @@ export const C08 = makeCardPropertyRule(
   ["C03", "C01"]
 );
 
-// C09: One-Eyed Jacks Wild — Jack of Hearts and Jack of Spades are wild
+// C09 One-Eyed Jacks Wild: Jack of Hearts and Jack of Spades are wild
 export const C09 = makeCardPropertyRule(
   "C09", "One-Eyed Jacks Wild",
   "Jack of Hearts and Jack of Spades are wild",
@@ -135,7 +135,7 @@ export const C09 = makeCardPropertyRule(
   ["C01", "C10"]
 );
 
-// C10: Lucky Sevens — 7s are wild, but only if hand is pairs or better
+// C10 Lucky Sevens: 7s are wild, but only if hand is pairs or better
 // Handled via two-pass evaluation in the pipeline.
 export const C10: Rule = {
   id: "C10",

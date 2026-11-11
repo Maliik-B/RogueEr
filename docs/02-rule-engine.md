@@ -144,7 +144,7 @@ interface Rule {
   name: string;            // Display name, e.g., "Underdog Straight"
   description: string;     // Player-facing explanation
   apply: (context: EvaluationContext) => EvaluationContext;
-  // The transformation function — details depend on category:
+  // The transformation function; details depend on category:
   //   hierarchy:    modifies handRankings order
   //   card_property: modifies card values/suits before eval
   //   composition:  modifies hand detection logic

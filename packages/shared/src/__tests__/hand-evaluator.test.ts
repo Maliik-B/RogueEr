@@ -77,7 +77,7 @@ describe("evaluateHand", () => {
       expect(compareHands(a, b)).toBe(-1);
     });
 
-    it("same quads — higher kicker wins", () => {
+    it("same quads, higher kicker wins", () => {
       const a = evaluateHand(cards("9h", "9d", "9c", "9s", "Ah", "3d", "7c"));
       const b = evaluateHand(cards("9h", "9d", "9c", "9s", "Kh", "3d", "7c"));
       expect(compareHands(a, b)).toBe(-1);
@@ -97,7 +97,7 @@ describe("evaluateHand", () => {
       expect(compareHands(a, b)).toBe(-1);
     });
 
-    it("same trips — higher pair wins", () => {
+    it("same trips, higher pair wins", () => {
       const a = evaluateHand(cards("Ah", "Ad", "Ac", "Kh", "Kd", "3s", "7c"));
       const b = evaluateHand(cards("Ah", "Ad", "Ac", "Qh", "Qd", "3s", "7c"));
       expect(compareHands(a, b)).toBe(-1);
@@ -175,7 +175,7 @@ describe("evaluateHand", () => {
       expect(compareHands(a, b)).toBe(-1);
     });
 
-    it("same trips — kickers break tie", () => {
+    it("same trips, kickers break tie", () => {
       const a = evaluateHand(cards("Ah", "Ad", "Ac", "Ks", "Qh", "7d", "3c"));
       const b = evaluateHand(cards("Ah", "Ad", "Ac", "Ks", "Jh", "7d", "3c"));
       expect(compareHands(a, b)).toBe(-1);
@@ -194,13 +194,13 @@ describe("evaluateHand", () => {
       expect(compareHands(a, b)).toBe(-1);
     });
 
-    it("same top pair — higher second pair wins", () => {
+    it("same top pair, higher second pair wins", () => {
       const a = evaluateHand(cards("Ah", "Ad", "Kc", "Ks", "9h", "7d", "3c"));
       const b = evaluateHand(cards("Ah", "Ad", "Qc", "Qs", "Kh", "7d", "3c"));
       expect(compareHands(a, b)).toBe(-1);
     });
 
-    it("same two pair — kicker breaks tie", () => {
+    it("same two pair, kicker breaks tie", () => {
       const a = evaluateHand(cards("Ah", "Ad", "Kc", "Ks", "Qh", "7d", "3c"));
       const b = evaluateHand(cards("Ah", "Ad", "Kc", "Ks", "Jh", "7d", "3c"));
       expect(compareHands(a, b)).toBe(-1);
@@ -219,7 +219,7 @@ describe("evaluateHand", () => {
       expect(compareHands(a, b)).toBe(-1);
     });
 
-    it("same pair — kickers break tie", () => {
+    it("same pair, kickers break tie", () => {
       const a = evaluateHand(cards("Ah", "Ad", "Kc", "Qs", "9h", "7d", "3c"));
       const b = evaluateHand(cards("Ah", "Ad", "Kc", "Js", "9h", "7d", "3c"));
       expect(compareHands(a, b)).toBe(-1);
@@ -238,7 +238,7 @@ describe("evaluateHand", () => {
       expect(compareHands(a, b)).toBe(-1);
     });
 
-    it("same top cards — lower kickers break tie", () => {
+    it("same top cards, lower kickers break tie", () => {
       const a = evaluateHand(cards("Ah", "Kd", "Qc", "Js", "9h", "7d", "3c"));
       const b = evaluateHand(cards("Ah", "Kd", "Qc", "Js", "8h", "7d", "3c"));
       expect(compareHands(a, b)).toBe(-1);
@@ -308,14 +308,14 @@ describe("determineWinners", () => {
     expect(determineWinners([player1, player2])).toEqual([0, 1]);
   });
 
-  it("three players — one winner", () => {
+  it("three players, one winner", () => {
     const player1 = cards("Ah", "Ad", "Kc", "Qs", "9h", "7d", "3c"); // pair of aces
     const player2 = cards("Kh", "Kd", "Ac", "Qs", "9h", "7d", "3c"); // pair of kings
     const player3 = cards("Qh", "Qd", "Ac", "Ks", "9h", "7d", "3c"); // pair of queens
     expect(determineWinners([player1, player2, player3])).toEqual([0]);
   });
 
-  it("three players — two-way tie", () => {
+  it("three players, two-way tie", () => {
     // Same straight for players 0 and 2
     const player1 = cards("Ah", "Kd", "Qc", "Js", "Th", "3d", "7c");
     const player2 = cards("9h", "9d", "2c", "3s", "4h", "6d", "8c"); // pair of 9s
@@ -352,7 +352,7 @@ describe("edge cases", () => {
     expect(hand.kickers[0]).toBe(14);
   });
 
-  it("three pairs — picks best two pair + best kicker", () => {
+  it("three pairs: picks best two pair + best kicker", () => {
     const hand = evaluateHand(cards("Ah", "Ad", "Kc", "Ks", "Qh", "Qd", "3c"));
     expect(hand.handType).toBe("two_pair");
     // Should pick aces and kings with queen kicker

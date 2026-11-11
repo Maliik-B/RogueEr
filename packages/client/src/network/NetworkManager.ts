@@ -213,7 +213,7 @@ export class NetworkManager {
       }),
     );
 
-    // Settings (nested schema) — use listen on key properties to avoid onChange refId issue
+    // Settings (nested schema): use listen on key properties to avoid onChange refId issue
     const settings$ = state$.settings;
     const emitSettings = () => {
       this.events.emit(E.SETTINGS_CHANGE, this.room!.state.settings);

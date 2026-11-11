@@ -62,7 +62,7 @@ export const CONFLICT_MATRIX: Record<string, string[]> = {
   F08: [],
   F09: [],
   F10: [],
-  // Hierarchy rules don't conflict — they compose via sequential swaps
+  // Hierarchy rules don't conflict; they compose via sequential swaps
 };
 
 /** Check if two rules conflict with each other. */

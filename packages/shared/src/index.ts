@@ -1,4 +1,4 @@
-// @rogueer/shared — Types, constants, and game logic shared between client and server
+// @rogueer/shared: Types, constants, and game logic shared between client and server
 
 export * from "./types.js";
 export * from "./constants.js";

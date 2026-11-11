@@ -429,7 +429,7 @@ function detectTwoPairC(cards: Card[], config: DetectionConfig): HandDetection |
   const highPair = pairs[0];
   const lowPair = pairs[1];
 
-  // F08: Double Pair Plus — both pairs must be >= threshold
+  // F08 Double Pair Plus: both pairs must be >= threshold
   if (highPair[0] < config.twoPairMinValue || lowPair[0] < config.twoPairMinValue) {
     return null;
   }

@@ -89,7 +89,7 @@ export class PlayerState extends Schema {
   // Number of hole cards dealt (clients render face-down cards for opponents)
   @type("uint8") holeCardCount: number = 0;
 
-  // Vote (visible to all for now — vote visibility filtering deferred to Phase 5)
+  // Vote (visible to all for now; vote visibility filtering deferred to Phase 5)
   @type(VoteSchema) vote: VoteSchema | null = null;
 }
 

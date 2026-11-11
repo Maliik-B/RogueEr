@@ -1,5 +1,5 @@
 // ============================================================
-// Pot Calculation — Main pot, side pots, and distribution
+// Pot Calculation: Main pot, side pots, and distribution
 // ============================================================
 
 /**

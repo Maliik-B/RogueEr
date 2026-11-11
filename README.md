@@ -5,7 +5,6 @@ A multiplayer poker game where the rules mutate every round. Players vote on rul
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Phaser](https://img.shields.io/badge/Phaser_4-8B0000?logoColor=white)
 ![Colyseus](https://img.shields.io/badge/Colyseus-7B68EE?logoColor=white)
-![Tauri](https://img.shields.io/badge/Tauri-24C8D8?logo=tauri&logoColor=white)
 
 ---
 
@@ -85,11 +84,11 @@ Interactive phases (`*_BET`, `VOTING_*`, `LOBBY`) wait on player actions or time
 - **Private Hole Cards** -- Hole cards ship as a direct server-to-client message, not in the synced state; only a sanitized `holeCardCount` is in the schema, used to render face-down cards for opponents. See [`docs/03-colyseus-schema.md`](docs/03-colyseus-schema.md).
 - **Seeded RNG** -- Mulberry32 PRNG for reproducible shuffles and rule draws.
 - **Side Pots** -- Multi-level side pot creation on all-in with proper odd-chip distribution.
-- **Spectator Support** -- Join mid-game, queue for a seat, delayed hole card reveal.
+- **Spectators** -- Anyone who joins mid-game, or finds every seat taken, enters the room as a spectator instead of a player. A seat queue, delayed hole card reveal and a spectator view of its own are still to come.
 
 ## Status
 
-Phases 1-4 complete. Core game loop is fully playable: lobby, full Hold'em rounds with rule mutations, voting, showdown, and multi-round progression. Phase 5 (Tauri packaging, audio, visual polish) is next.
+Phases 1-3 complete. Phase 4 (the client) has its core done, with three polish items left: spectator view, disconnect overlay, and side pot display. Core game loop is fully playable: lobby, full Hold'em rounds with rule mutations, voting, showdown, and multi-round progression. Phase 5 (Tauri packaging, audio, visual polish) is next.
 
 `30 rule mutations` | `14-phase state machine` | `4-stage evaluation pipeline`
 

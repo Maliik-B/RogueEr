@@ -296,7 +296,7 @@ describe("getValidActions", () => {
 });
 
 // ============================================================
-// applyAction — core betting flows
+// applyAction: core betting flows
 // ============================================================
 
 describe("applyAction", () => {
@@ -425,7 +425,7 @@ describe("all-in", () => {
     state = applyAction(state, "all_in");
     expect(state.players.find((p) => p.id === "B")!.currentBet).toBe(30);
     expect(state.players.find((p) => p.id === "B")!.status).toBe("all_in");
-    // Partial raise (30 < 100 + minRaise) — doesn't reopen
+    // Partial raise (30 < 100 + minRaise) doesn't reopen
     expect(state.roundComplete).toBe(true);
   });
 
@@ -643,7 +643,7 @@ describe("full round integration", () => {
     const postOrder = getPostFlopOrder(["A", "B", "C"], 0);
     let post = createBettingRound(postPlayers, postOrder, 0, 20, false);
 
-    // B acts first (SB position, but check — C is folded so skip)
+    // B acts first (SB position, but check: C is folded so skip)
     expect(getCurrentPlayerId(post)).toBe("B");
     post = applyAction(post, "bet", 40); // B bets 40
     // C is folded, skip to A

@@ -449,7 +449,7 @@ export class PhaseEngine {
 
     // Distribute pots using shared logic
     const payouts = distributePots(pots, (eligibleIds) => {
-      // Only one player in pot — auto-win (no showdown needed)
+      // Only one player in pot: auto-win (no showdown needed)
       if (eligibleIds.length === 1) return eligibleIds;
 
       const entries = eligibleIds.map((id) => ({

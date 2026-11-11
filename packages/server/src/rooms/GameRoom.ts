@@ -252,7 +252,7 @@ export class GameRoom extends Room<GameState> {
       }
     });
 
-    // All abstained — no changes
+    // All abstained, so no changes
     if (votes.length === 0) {
       this.finalizeVoting();
       return;
@@ -266,7 +266,7 @@ export class GameRoom extends Room<GameState> {
     const maxSlotVotes = Math.max(...slotCounts.values());
     const topSlots = [...slotCounts.entries()].filter(([, c]) => c === maxSlotVotes);
     if (topSlots.length !== 1) {
-      // Tie on slot — no action
+      // Tie on slot: no action
       this.broadcastVoteResult(0, "", "", true, "Tied on slot target: no action taken");
       this.finalizeVoting();
       return;
@@ -300,7 +300,7 @@ export class GameRoom extends Room<GameState> {
         const maxReplace = Math.max(...replaceCounts.values());
         const topReplacements = [...replaceCounts.entries()].filter(([, c]) => c === maxReplace);
         if (topReplacements.length !== 1) {
-          // Tie on replacement — delete instead
+          // Tie on replacement: delete instead
           this.applyVoteAction(winningSlot, "delete", "");
           this.broadcastVoteResult(winningSlot, "delete", "", false, "Tied on replacement: rule deleted instead");
           this.finalizeVoting();

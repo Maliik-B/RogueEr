@@ -48,13 +48,13 @@ class Player extends Schema {
   @type("boolean")  isReady: boolean;             // lobby phase only
   @type("boolean")  isHost: boolean;
 
-  // FILTERED — only the owning client receives their hole cards
+  // FILTERED: only the owning client receives their hole cards
   @filter(function(this: Player, client: Client) {
     return client.sessionId === this.sessionId;
   })
   @type([Card])     holeCards: ArraySchema<Card>;
 
-  // FILTERED — visibility depends on vote_visibility setting
+  // FILTERED: visibility depends on vote_visibility setting
   // See Voting State section for details
   @type(Vote)       vote: Vote | null;
 }
@@ -180,7 +180,7 @@ Implementation approach: Use `@filter()` on the `vote` property within `Player`:
   const visibility = root.settings.voteVisibility;
   if (visibility === "live") return true;
   if (visibility === "after_lock" && value?.locked) return true;
-  // "hidden" — only owner sees
+  // "hidden": only owner sees
   return false;
 })
 @type(Vote) vote: Vote | null;

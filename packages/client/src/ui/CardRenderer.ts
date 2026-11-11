@@ -56,7 +56,7 @@ export function createFaceDown(scene: Scene, x: number, y: number): GameObjects.
   bg.strokeRoundedRect(-CARD_W / 2, -CARD_H / 2, CARD_W, CARD_H, 4);
   container.add(bg);
 
-  // Back pattern — simple diamond
+  // Back pattern: simple diamond
   const pattern = scene.add
     .text(0, 0, "\u25C6", {
       fontSize: "18px",
