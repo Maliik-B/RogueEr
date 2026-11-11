@@ -33,14 +33,14 @@
 - [x] Define room lifecycle (create, join, leave, reconnect)
 - [x] Define lobby settings schema
 - [x] Define spectator support (join mid-game, queue for seat, hole card delay)
-- [x] Define room persistence (Redis snapshots + PostgreSQL for completed games)
-- [x] Define action log / replay system (full logging, REST replay endpoint, DB schema)
+- [x] Define room persistence (Redis snapshots + PostgreSQL for completed games; designed, not built yet)
+- [x] Define action log / replay system (full logging, REST replay endpoint, DB schema; designed, not built yet)
 - **Status:** COMPLETE (see `docs/03-colyseus-schema.md`)
 
 ### 1.4 Project Scaffolding
 - [x] Install pnpm, initialize monorepo with pnpm workspaces
 - [x] Scaffold `shared/` with TypeScript (game types, constants)
-- [x] Scaffold `server/` with Colyseus (v0.17.9, schema v4.0.20)
+- [x] Scaffold `server/` with Colyseus (colyseus 0.16, @colyseus/schema 3)
 - [x] Scaffold `client/` with Phaser.js (v4) + Vite (v8), Tauri deferred to Phase 5
 - [x] Configure root tsconfig, per-package tsconfigs (experimentalDecorators, composite refs)
 - [x] Verify: `pnpm build` compiles all 3 packages, server starts on ws://localhost:2567
@@ -255,9 +255,9 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 | 2026-04-15 | TypeScript + Phaser + Colyseus stack | Full-stack TypeScript allows shared logic across client and server |
 | 2026-04-15 | Premium purchase model ($15-20) | Proven by Balatro/StS2, avoids gambling regulation issues |
 | 2026-04-16 | Spectators included in MVP | Increases engagement, spectators can queue for seats |
-| 2026-04-16 | Redis-backed room persistence | Crash recovery essential for real product |
-| 2026-04-16 | Full action log + replay system | Dispute resolution, replay feature, analytics foundation |
-| 2026-04-16 | PostgreSQL for completed game data | Long-term storage for replays, stats, player history |
+| 2026-04-16 | Redis-backed room persistence (not built yet) | Crash recovery essential for real product |
+| 2026-04-16 | Full action log + replay system (not built yet) | Dispute resolution, replay feature, analytics foundation |
+| 2026-04-16 | PostgreSQL for completed game data (not built yet) | Long-term storage for replays, stats, player history |
 | 2026-04-16 | Antes excluded from currentBet in betting module | Antes contribute to pot/totalBet but not currentBet. Standard Hold'em: antes are forced contributions, not bets to match |
 | 2026-04-16 | needsToAct model for betting rounds | Cleaner than tracking lastRaiser: partial all-in raises naturally handled by not reopening needsToAct |
 | 2026-04-16 | Immutable betting state (applyAction returns new state) | Pure functions in shared/; server holds the reference, each action produces a new snapshot |
