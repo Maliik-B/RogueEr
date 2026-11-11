@@ -331,7 +331,7 @@ export class VotingPanel {
     if (action === "replace") {
       this.statusText.setText("Select a replacement rule");
     } else {
-      this.statusText.setText(`${action} Slot ${slotIndex + 1} — click Lock to confirm`);
+      this.statusText.setText(`${action} Slot ${slotIndex + 1}: click Lock to confirm`);
     }
   }
 
@@ -352,7 +352,7 @@ export class VotingPanel {
       }
     }
 
-    this.statusText.setText(`Replace Slot ${slotIndex + 1} — click Lock to confirm`);
+    this.statusText.setText(`Replace Slot ${slotIndex + 1}: click Lock to confirm`);
   }
 
   private onLock() {
@@ -367,7 +367,7 @@ export class VotingPanel {
     this.isLocked = true;
     this.lockButton.setEnabled(false);
     this.lockButton.setLabel("[ Vote Locked ]");
-    this.statusText.setText("Vote submitted — waiting for others...");
+    this.statusText.setText("Vote submitted, waiting for others...");
 
     const targetSlot = this.selectedSlot >= 0 ? this.selectedSlot : 0;
     this.net.sendVote(targetSlot, this.selectedAction, this.selectedReplacement || undefined);

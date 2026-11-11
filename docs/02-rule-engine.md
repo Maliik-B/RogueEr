@@ -1,4 +1,4 @@
-# 1.2 — Rule Engine
+# 1.2 Rule Engine
 
 ## Core Concept
 
@@ -10,7 +10,7 @@ Each round begins with 3 rule slots, each bound to a specific **category**. Rule
 
 Each slot is assigned a fixed category. The 3 categories target different axes of poker hand evaluation:
 
-### Slot 1 — Hierarchy Rules
+### Slot 1: Hierarchy Rules
 Directly alter the ranking order of hand types.
 
 **Examples:**
@@ -31,7 +31,7 @@ Directly alter the ranking order of hand types.
 
 ---
 
-### Slot 2 — Card Property Rules
+### Slot 2: Card Property Rules
 Alter how individual cards, values, or suits behave during evaluation.
 
 **Examples:**
@@ -43,8 +43,8 @@ Alter how individual cards, values, or suits behave during evaluation.
 | `C04` | Suit Merge: Red | Hearts and Diamonds are treated as the same suit |
 | `C05` | Suit Merge: Black | Spades and Clubs are treated as the same suit |
 | `C06` | Ace Splits | Each Ace counts as BOTH high and low simultaneously (best interpretation used) |
-| `C07` | Middle Strength | 6, 7, 8 are promoted — treated as value 12 (between Q and K) |
-| `C08` | Royal Rags | K, Q, J are demoted — treated as value 4, 3, 2 respectively |
+| `C07` | Middle Strength | 6, 7, 8 are promoted: treated as value 12 (between Q and K) |
+| `C08` | Royal Rags | K, Q, J are demoted: treated as value 4, 3, 2 respectively |
 | `C09` | One-Eyed Jacks Wild | Jack of Hearts and Jack of Spades are wild |
 | `C10` | Lucky Sevens | 7s count as wild, but only in pairs or better (single 7 is normal) |
 
@@ -52,7 +52,7 @@ Alter how individual cards, values, or suits behave during evaluation.
 
 ---
 
-### Slot 3 — Hand Composition Rules
+### Slot 3: Hand Composition Rules
 Change what constitutes a valid hand formation.
 
 **Examples:**
@@ -69,7 +69,7 @@ Change what constitutes a valid hand formation.
 | `F09` | Trips or Bust | Three of a Kind requires all 3 cards to be from different sources (at least 1 hole + at least 1 community) |
 | `F10` | Full House Lite | Full House can be formed with 2+2+1 (two pairs + kicker) in addition to the standard 3+2 |
 
-**Implementation:** These rules modify the hand detection functions themselves — changing what patterns the evaluator looks for.
+**Implementation:** These rules modify the hand detection functions themselves, changing what patterns the evaluator looks for.
 
 ---
 
@@ -86,14 +86,14 @@ No duplicates of currently active rules. Rules used in the previous round CAN ap
 ### Slot States
 Each slot has one of three states:
 ```
-ACTIVE      — Rule is in effect and can be voted on
-SOLIDIFIED  — Rule is locked in for the rest of the round (cannot be targeted)
-EMPTY       — Rule was deleted; slot can be filled via replace
+ACTIVE:      Rule is in effect and can be voted on
+SOLIDIFIED:  Rule is locked in for the rest of the round (cannot be targeted)
+EMPTY:       Rule was deleted; slot can be filled via replace
 ```
 
 ---
 
-## Replace Mechanics — Category Binding
+## Replace Mechanics: Category Binding
 
 This is where slot categories interact with voting strategy:
 
@@ -103,13 +103,13 @@ This is where slot categories interact with voting strategy:
 - Slot 1 replace → 3 random Hierarchy rules offered
 - Slot 2 replace → 3 random Card Property rules offered
 - Slot 3 replace → 3 random Hand Composition rules offered
-- This is the "safe" play — you know what type of rule you're getting.
+- This is the "safe" play: you know what type of rule you're getting.
 
 ### Fill Empty Slot (vote "replace" on an EMPTY slot)
 - Replacement options are drawn from **ANY category pool**.
 - The server offers 3 random rules pulled from across all categories.
 - The slot's category label updates to match whatever rule is placed in it.
-- This is the "wild card" play — more flexible but unpredictable.
+- This is the "wild card" play: more flexible but unpredictable.
 
 ### Strategic Implications
 - **Delete + later refill** is a two-phase gambit: sacrifice a known rule now for the chance to pull cross-category later.
@@ -126,7 +126,7 @@ When "replace" wins a vote, the replacement options must have already been visib
 ### During Voting Phase
 1. Server generates a **shortlist of 3 replacement options** per slot at the start of the voting phase.
    - For ACTIVE slots: 3 from the slot's category (excluding the current rule)
-   - For EMPTY slots: 3 from any category (1 from each, or random distribution — TBD)
+   - For EMPTY slots: 3 from any category (1 from each, or random distribution; TBD)
 2. All players see the shortlists for all slots before voting.
 3. A player voting "replace" on a slot also picks which of the 3 replacements they want.
 4. If "replace" wins, the most-voted replacement from the shortlist is applied.
@@ -210,7 +210,7 @@ This pipeline order matters: cards are transformed first, then patterns are dete
 ### Balance Considerations
 - Rules should create roughly symmetric advantage shifts (buffing weak hands should be as common as nerfing strong ones).
 - No rule should make the game unplayable or reduce all hands to the same value.
-- Wild card rules (Deuces Wild, etc.) are the most powerful — consider limiting to 1 wild-type rule active at a time.
+- Wild card rules (Deuces Wild, etc.) are the most powerful. Consider limiting to 1 wild-type rule active at a time.
 
 ---
 
@@ -218,7 +218,7 @@ This pipeline order matters: cards are transformed first, then patterns are dete
 
 | Decision | Resolution | Reasoning |
 |----------|-----------|-----------|
-| Slots bound to categories? | Yes — each slot has a fixed category | Prevents chaotic stacking of same-type rules |
+| Slots bound to categories? | Yes, each slot has a fixed category | Prevents chaotic stacking of same-type rules |
 | Direct replace = same category? | Yes | Safe, predictable option for voters |
 | Empty slot replace = any category? | Yes | Gives "delete" a distinct strategic purpose |
 | Slot category updates on cross-category fill? | Yes | Slot becomes whatever it now holds |
@@ -232,7 +232,7 @@ This pipeline order matters: cards are transformed first, then patterns are dete
 ## Resolved Questions
 
 1. **Empty slot shortlist distribution:** Default is 1-per-category. Lobby setting `empty_slot_distribution`: `balanced` (1 per category) or `fully_random`. Default: `balanced`.
-2. **Rule complexity tiers:** Yes — rules tagged with a `tier` field (`standard` or `advanced`). Lobby setting `rule_tier`: `standard_only` or `all`. Default: `all`. Allows the community to play with "broken" rules intentionally or exclude them.
+2. **Rule complexity tiers:** Yes. Rules tagged with a `tier` field (`standard` or `advanced`). Lobby setting `rule_tier`: `standard_only` or `all`. Default: `all`. Allows the community to play with "broken" rules intentionally or exclude them.
 
 ## Remaining Work
 

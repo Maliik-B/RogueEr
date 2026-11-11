@@ -98,7 +98,7 @@ export const C06: Rule = {
 // C07: Middle Strength — 6, 7, 8 promoted to value 12
 export const C07 = makeCardPropertyRule(
   "C07", "Middle Strength",
-  "6, 7, 8 are promoted — treated as value 12 (between Q and K)",
+  "6, 7, 8 are promoted: treated as value 12 (between Q and K)",
   "standard",
   (cards) => cards.map((c) => {
     if (c.value >= 6 && c.value <= 8) return cloneCard(c, { value: 12 });
@@ -110,7 +110,7 @@ export const C07 = makeCardPropertyRule(
 // C08: Royal Rags — K=4, Q=3, J=2
 export const C08 = makeCardPropertyRule(
   "C08", "Royal Rags",
-  "K, Q, J are demoted — treated as value 4, 3, 2 respectively",
+  "K, Q, J are demoted: treated as value 4, 3, 2 respectively",
   "advanced",
   (cards) => cards.map((c) => {
     if (c.value === 13) return cloneCard(c, { value: 4 });

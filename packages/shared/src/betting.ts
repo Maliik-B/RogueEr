@@ -307,8 +307,8 @@ export function applyAction(
 
     case "call": {
       const toCall = currentBet - player.currentBet;
-      if (toCall <= 0) throw new Error("Nothing to call — use check");
-      if (toCall > player.chips) throw new Error("Cannot afford call — use all_in");
+      if (toCall <= 0) throw new Error("Nothing to call: use check");
+      if (toCall > player.chips) throw new Error("Cannot afford call: use all_in");
       player.chips -= toCall;
       player.currentBet += toCall;
       player.totalBet += toCall;
@@ -318,9 +318,9 @@ export function applyAction(
     }
 
     case "bet": {
-      if (currentBet > 0) throw new Error("Cannot bet — use raise");
+      if (currentBet > 0) throw new Error("Cannot bet: use raise");
       if (amount === undefined) throw new Error("Bet requires an amount");
-      if (amount > player.chips) throw new Error("Bet exceeds chips — use all_in");
+      if (amount > player.chips) throw new Error("Bet exceeds chips: use all_in");
       if (amount < state.bigBlind && amount < player.chips) {
         throw new Error(`Bet must be at least ${state.bigBlind}`);
       }
@@ -336,11 +336,11 @@ export function applyAction(
     }
 
     case "raise": {
-      if (currentBet === 0) throw new Error("Cannot raise — use bet");
+      if (currentBet === 0) throw new Error("Cannot raise: use bet");
       if (amount === undefined) throw new Error("Raise requires amount (raise TO)");
       const minTotal = currentBet + state.minRaise;
       const additional = amount - player.currentBet;
-      if (additional > player.chips) throw new Error("Raise exceeds chips — use all_in");
+      if (additional > player.chips) throw new Error("Raise exceeds chips: use all_in");
       if (amount < minTotal && additional < player.chips) {
         throw new Error(`Raise must be to at least ${minTotal}`);
       }

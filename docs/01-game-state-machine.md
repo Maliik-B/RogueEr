@@ -1,4 +1,4 @@
-# 1.1 — Game State Machine
+# 1.1 Game State Machine
 
 ## Round Flow Overview
 
@@ -85,9 +85,9 @@ ROUND_END ─── Award pot, reset state, rotate dealer
 - **Valid actions:** `fold`, `call`, `raise`, `all_in`
   - Big blind can also `check` if no raise occurred.
 - **Transitions to:**
-  - `ROUND_END` — if all but one player folded
-  - `VOTING_1` — if voting before flop is enabled in lobby settings
-  - `FLOP` — if voting before flop is disabled
+  - `ROUND_END`: if all but one player folded
+  - `VOTING_1`: if voting before flop is enabled in lobby settings
+  - `FLOP`: if voting before flop is disabled
 
 ### VOTING_1
 - **Description:** First rule modification vote. Only non-folded players participate.
@@ -95,7 +95,7 @@ ROUND_END ─── Award pot, reset state, rotate dealer
 - **Valid actions:** `vote(slot, action, [replacement_rule])` or `abstain`
   - `slot`: Which rule slot (1, 2, or 3) the player wants to target
   - `action`: `solidify`, `delete`, or `replace`
-  - `replacement_rule`: Required only if action is `replace` — chosen from a presented set of options
+  - `replacement_rule`: Required only if action is `replace`, chosen from a presented set of options
 - **Resolution:** See Voting Mechanics below.
 - **Transitions to:** `FLOP`
 
@@ -109,9 +109,9 @@ ROUND_END ─── Award pot, reset state, rotate dealer
 - **Action order:** Starts with first active player left of dealer.
 - **Valid actions:** `fold`, `check`, `bet`, `raise`, `all_in`
 - **Transitions to:**
-  - `ROUND_END` — if all but one player folded
-  - `VOTING_2` — if voting before turn is enabled
-  - `TURN` — if voting before turn is disabled
+  - `ROUND_END`: if all but one player folded
+  - `VOTING_2`: if voting before turn is enabled
+  - `TURN`: if voting before turn is disabled
 - **Skipped if:** All active players are all-in
 
 ### VOTING_2
@@ -126,7 +126,7 @@ ROUND_END ─── Award pot, reset state, rotate dealer
 ### TURN_BET
 - **Description:** Standard betting round.
 - **Transitions to:**
-  - `ROUND_END` — if all but one player folded
+  - `ROUND_END`: if all but one player folded
   - `RIVER`
 - **Skipped if:** All active players are all-in
 
@@ -138,7 +138,7 @@ ROUND_END ─── Award pot, reset state, rotate dealer
 ### RIVER_BET
 - **Description:** Final betting round.
 - **Transitions to:**
-  - `ROUND_END` — if all but one player folded
+  - `ROUND_END`: if all but one player folded
   - `SHOWDOWN`
 - **Skipped if:** All active players are all-in
 
@@ -156,15 +156,15 @@ ROUND_END ─── Award pot, reset state, rotate dealer
   - Eliminate players with 0 chips (if elimination mode)
   - Brief pause for players to see results
 - **Transitions to:**
-  - `ROUND_START` — if 2+ players remain
-  - `LOBBY` — if game is over (1 player left or configurable end condition)
+  - `ROUND_START`: if 2+ players remain
+  - `LOBBY`: if game is over (1 player left or configurable end condition)
 
 ---
 
 ## Voting Mechanics
 
 ### Simultaneous Voting
-All eligible players submit their vote within the timer. Default visibility is `after_lock` — votes are revealed as players lock them in, but cannot be changed once submitted.
+All eligible players submit their vote within the timer. Default visibility is `after_lock`: votes are revealed as players lock them in, but cannot be changed once submitted.
 
 ### Vote Structure (per player)
 Each player submits ONE vote consisting of:
@@ -224,12 +224,12 @@ When a player goes all-in for less than the current bet, a side pot is created. 
 ## Player States (per round)
 
 ```
-WAITING      — not yet their turn
-ACTING       — it's their turn to act
-FOLDED       — out of this round
-ALL_IN       — has bet all chips, no more actions (can still vote)
-ELIMINATED   — 0 chips, out of the game (if elimination mode)
-DISCONNECTED — temporarily disconnected, timer still runs
+WAITING:      not yet their turn
+ACTING:       it's their turn to act
+FOLDED:       out of this round
+ALL_IN:       has bet all chips, no more actions (can still vote)
+ELIMINATED:   0 chips, out of the game (if elimination mode)
+DISCONNECTED: temporarily disconnected, timer still runs
 ```
 
 ---
@@ -270,7 +270,7 @@ DISCONNECTED — temporarily disconnected, timer still runs
 
 ## Resolved Questions
 
-1. **Can a deleted rule slot be filled via "replace" in a later voting phase?** YES — otherwise deleting is always strictly worse than solidifying.
-2. **Should players see each other's votes before resolution, or only the result?** Lobby setting (`vote_visibility`). Default: `after_lock` — votes shown as players lock them in, but immutable once submitted.
-3. **Pre-flop betting before voting or after?** BEFORE — bet on current rules, then rules may shift. Creates core tension and rewards adaptability.
+1. **Can a deleted rule slot be filled via "replace" in a later voting phase?** YES. Otherwise deleting is always strictly worse than solidifying.
+2. **Should players see each other's votes before resolution, or only the result?** Lobby setting (`vote_visibility`). Default: `after_lock` (votes shown as players lock them in, but immutable once submitted).
+3. **Pre-flop betting before voting or after?** BEFORE: bet on current rules, then rules may shift. Creates core tension and rewards adaptability.
 4. **Should blind levels escalate over time (tournament structure)?** YES, as a lobby setting (`blind_escalation`). Off by default. Deferred to Phase 2 implementation but accounted for in the state machine.

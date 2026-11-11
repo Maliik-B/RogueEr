@@ -1,10 +1,10 @@
-# RogueEr — Development Progress
+# RogueEr: Development Progress
 
 ## Tech Stack
 - **Client:** TypeScript + Phaser.js + Tauri
 - **Server:** TypeScript + Colyseus
 - **Shared:** TypeScript (hand evaluation, rule engine, constants)
-- **Structure:** Monorepo — `client/`, `server/`, `shared/`
+- **Structure:** Monorepo (`client/`, `server/`, `shared/`)
 
 ---
 
@@ -15,7 +15,7 @@
 - [x] Define transitions and conditions between phases
 - [x] Define player action types per phase (bet, fold, check, raise, vote)
 - [x] Document the full state machine diagram/spec
-- **Status:** COMPLETE — see `docs/01-game-state-machine.md`
+- **Status:** COMPLETE (see `docs/01-game-state-machine.md`)
 
 ### 1.2 Rule Engine
 - [x] Define rule representation format (data structure)
@@ -24,7 +24,7 @@
 - [x] Define voting mechanics (solidify, delete, replace + category binding)
 - [x] Define rule slot system (3 slots, category-bound, randomization)
 - [x] Define rule pool (~10 per category, 30 total for launch)
-- **Status:** COMPLETE — see `docs/02-rule-engine.md`
+- **Status:** COMPLETE (see `docs/02-rule-engine.md`)
 
 ### 1.3 Colyseus Room & Schema Design
 - [x] Define room state schema (what clients see vs. what's server-only)
@@ -35,13 +35,13 @@
 - [x] Define spectator support (join mid-game, queue for seat, hole card delay)
 - [x] Define room persistence (Redis snapshots + PostgreSQL for completed games)
 - [x] Define action log / replay system (full logging, REST replay endpoint, DB schema)
-- **Status:** COMPLETE — see `docs/03-colyseus-schema.md`
+- **Status:** COMPLETE (see `docs/03-colyseus-schema.md`)
 
 ### 1.4 Project Scaffolding
 - [x] Install pnpm, initialize monorepo with pnpm workspaces
 - [x] Scaffold `shared/` with TypeScript (game types, constants)
 - [x] Scaffold `server/` with Colyseus (v0.17.9, schema v4.0.20)
-- [x] Scaffold `client/` with Phaser.js (v4) + Vite (v8) — Tauri deferred to Phase 5
+- [x] Scaffold `client/` with Phaser.js (v4) + Vite (v8), Tauri deferred to Phase 5
 - [x] Configure root tsconfig, per-package tsconfigs (experimentalDecorators, composite refs)
 - [x] Verify: `pnpm build` compiles all 3 packages, server starts on ws://localhost:2567
 - **Status:** COMPLETE
@@ -54,10 +54,10 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 
 ### 2.1 Deck Management
 - [x] Deck creation (52 cards)
-- [x] Fisher-Yates shuffle (seeded RNG for reproducibility — mulberry32 PRNG)
+- [x] Fisher-Yates shuffle (seeded RNG for reproducibility, mulberry32 PRNG)
 - [x] Deal N cards from top of deck
 - [x] Unit tests (15 tests)
-- **Status:** COMPLETE — see `packages/shared/src/deck.ts`
+- **Status:** COMPLETE (see `packages/shared/src/deck.ts`)
 
 ### 2.2 Hand Evaluation Engine
 - [x] Detect all 10 standard hand types from 7 cards (pick best 5)
@@ -65,7 +65,7 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] Compare two evaluated hands to determine winner
 - [x] determineWinners() for multi-player showdown (split pot support)
 - [x] Unit tests for all hand types and edge cases (45 tests)
-- **Status:** COMPLETE — see `packages/shared/src/hand-evaluator.ts`
+- **Status:** COMPLETE (see `packages/shared/src/hand-evaluator.ts`)
 
 ### 2.3 Rule Engine Implementation
 - [x] Define all 30 rules (10 per category) with apply() functions
@@ -83,7 +83,7 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] three_card_flush HandType support (F06)
 - [x] Full House Lite 2+2+1 pattern (F10)
 - [x] Unit tests (56 tests: hierarchy, card-property, composition, pipeline integration)
-- **Status:** COMPLETE — see `packages/shared/src/rule-engine.ts`, `packages/shared/src/rules/`
+- **Status:** COMPLETE (see `packages/shared/src/rule-engine.ts`, `packages/shared/src/rules/`)
 
 ### 2.4 Pot Calculation
 - [x] Main pot tracking
@@ -91,7 +91,7 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] Split pot logic for ties (odd chip distribution)
 - [x] Pot distribution to winner(s) (callback-based getWinners for flexibility)
 - [x] Unit tests (17 tests)
-- **Status:** COMPLETE — see `packages/shared/src/pot.ts`
+- **Status:** COMPLETE (see `packages/shared/src/pot.ts`)
 
 ### 2.5 Betting Logic
 - [x] Validate actions (fold, check, call, bet, raise, all-in)
@@ -102,9 +102,9 @@ All code goes in `packages/shared/src/`. Must be deterministic, pure functions, 
 - [x] All-in partial raise does not reopen action (standard Hold'em rule)
 - [x] Round transition helpers (prepareNextRound, getContributions, getFoldedPlayerIds)
 - [x] Unit tests (47 tests)
-- **Status:** COMPLETE — see `packages/shared/src/betting.ts`
+- **Status:** COMPLETE (see `packages/shared/src/betting.ts`)
 
-- **Status:** COMPLETE — 2.1–2.5 all done (180 total tests). Phase 2 shared game logic finished.
+- **Status:** COMPLETE. 2.1–2.5 all done (180 total tests). Phase 2 shared game logic finished.
 
 ---
 
@@ -121,7 +121,7 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 - [x] `GameRoom.onJoin` wires up `StateView` per client (player vs spectator paths)
 - [x] `GameRoom.onLeave` handles lobby removal vs in-game disconnect
 - [x] Seat assignment, host assignment, spectator lifecycle
-- **Status:** COMPLETE — see `packages/server/src/schema/GameState.ts`
+- **Status:** COMPLETE (see `packages/server/src/schema/GameState.ts`)
 
 ### 3.2 Game Room & State Machine
 - [x] Phase transition engine (14 phases, auto-advance for DEAL/FLOP/TURN/RIVER)
@@ -145,7 +145,7 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 - [x] Route `player_vote` messages, validate (non-folded, slot targetable, action valid)
 - [x] Vote resolution algorithm: slot majority → action majority → replacement majority (per `docs/01-game-state-machine.md`)
 - [x] Apply results: solidify/delete/replace rule slots using shared rule pool
-- [ ] Vote visibility filtering (hidden/after_lock/live per lobby setting) — deferred, wiring stubbed
+- [ ] Vote visibility filtering (hidden/after_lock/live per lobby setting): deferred, wiring stubbed
 - **Target file:** `packages/server/src/rooms/handlers/voting-handler.ts`
 - **Status:** COMPLETE (vote visibility cross-client wiring deferred)
 
@@ -159,14 +159,14 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 
 ### 3.6 Lobby & Lifecycle
 - [x] `onJoin`: assign seat, set host, handle spectators (queue for seat, hole card delay)
-- [ ] `onLeave`: reconnect grace period (60s) — deferred, auto-fold on disconnect implemented
+- [ ] `onLeave`: reconnect grace period (60s). Deferred, auto-fold on disconnect implemented
 - [x] `onCreate`: initialize state, apply default lobby settings
 - [x] Host `update_settings`, `start_game` (validate min players + all ready)
 - [x] `player_ready` toggle
 - **Target files:** `packages/server/src/rooms/GameRoom.ts`, `packages/server/src/rooms/handlers/lobby-handler.ts`
 - **Status:** COMPLETE (reconnection grace period deferred)
 
-- **Status:** COMPLETE — 3.1–3.6 all done. Full game loop operational. Two items deferred: vote visibility cross-client wiring, reconnection allowReconnection() grace period.
+- **Status:** COMPLETE. 3.1–3.6 all done. Full game loop operational. Two items deferred: vote visibility cross-client wiring, reconnection allowReconnection() grace period.
 
 ---
 
@@ -230,9 +230,9 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 - [ ] Spectator mode (join mid-game → no betting/voting panels)
 - [ ] Disconnection overlay with reconnect button
 - [ ] Side pot display
-- **Status:** IN PROGRESS — core features complete, 3 items remaining
+- **Status:** IN PROGRESS (core features complete, 3 items remaining)
 
-- **Status:** Phase 4 core COMPLETE — `pnpm build` passes. NetworkManager, LobbyScene, TableScene, BettingPanel, VotingPanel, RuleDisplay, ShowdownOverlay all implemented. 3 polish items deferred (spectator UI, disconnect overlay, side pot display).
+- **Status:** Phase 4 core COMPLETE. `pnpm build` passes. NetworkManager, LobbyScene, TableScene, BettingPanel, VotingPanel, RuleDisplay, ShowdownOverlay all implemented. 3 polish items deferred (spectator UI, disconnect overlay, side pot display).
 
 ---
 
@@ -258,9 +258,9 @@ All code goes in `packages/server/src/`. Orchestrates shared game logic via Coly
 | 2026-04-16 | Redis-backed room persistence | Crash recovery essential for real product |
 | 2026-04-16 | Full action log + replay system | Dispute resolution, replay feature, analytics foundation |
 | 2026-04-16 | PostgreSQL for completed game data | Long-term storage for replays, stats, player history |
-| 2026-04-16 | Antes excluded from currentBet in betting module | Antes contribute to pot/totalBet but not currentBet — standard Hold'em: antes are forced contributions, not bets to match |
-| 2026-04-16 | needsToAct model for betting rounds | Cleaner than tracking lastRaiser — partial all-in raises naturally handled by not reopening needsToAct |
-| 2026-04-16 | Immutable betting state (applyAction returns new state) | Pure functions in shared/ — server holds the reference, each action produces a new snapshot |
+| 2026-04-16 | Antes excluded from currentBet in betting module | Antes contribute to pot/totalBet but not currentBet. Standard Hold'em: antes are forced contributions, not bets to match |
+| 2026-04-16 | needsToAct model for betting rounds | Cleaner than tracking lastRaiser: partial all-in raises naturally handled by not reopening needsToAct |
+| 2026-04-16 | Immutable betting state (applyAction returns new state) | Pure functions in shared/; server holds the reference, each action produces a new snapshot |
 | 2026-04-16 | PhaseEngine as separate class from GameRoom | Keeps GameRoom as a message router + state holder; PhaseEngine owns all 14-phase transition logic |
 | 2026-04-16 | Vote resolution lives in GameRoom.resolveVotes() | 3-tier majority algorithm needs access to schema state and rule pool; handler only validates and stores votes |
 | 2026-04-16 | Tie-on-replacement falls back to delete | Replace ties still produce a meaningful outcome (rule removed) rather than no-op |

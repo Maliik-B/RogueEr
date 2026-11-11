@@ -44,7 +44,7 @@ packages/
                voting UI, rule display, network manager)
 ```
 
-All game logic lives in `shared/` as pure functions, used by both server and client. The server is authoritative -- it orchestrates phases, validates actions, and syncs state via Colyseus schemas with per-client visibility (your hole cards are hidden from other players).
+All game logic lives in `shared/` as pure functions, used by both server and client. The server is authoritative: it orchestrates phases, validates actions, and syncs the shared table state via Colyseus schemas, while each player's hole cards travel as a private message, so no other client ever receives them.
 
 ### Round flow (14-phase state machine)
 
@@ -82,7 +82,7 @@ Interactive phases (`*_BET`, `VOTING_*`, `LOBBY`) wait on player actions or time
 
 - **4-Stage Evaluation Pipeline** -- hierarchy reorder, card transform, composition modify, then evaluate. Rules compose cleanly without special-casing. See [`docs/02-rule-engine.md`](docs/02-rule-engine.md).
 - **14-Phase State Machine** -- Deal, betting rounds, voting rounds, showdown, and round end, with auto-advance for non-interactive phases.
-- **Per-Client Schema Visibility** -- Hole cards ship as a direct server-to-client message, not in the synced state; only a sanitized `holeCardCount` is in the schema, used to render face-down cards for opponents. See [`docs/03-colyseus-schema.md`](docs/03-colyseus-schema.md).
+- **Private Hole Cards** -- Hole cards ship as a direct server-to-client message, not in the synced state; only a sanitized `holeCardCount` is in the schema, used to render face-down cards for opponents. See [`docs/03-colyseus-schema.md`](docs/03-colyseus-schema.md).
 - **Seeded RNG** -- Mulberry32 PRNG for reproducible shuffles and rule draws.
 - **Side Pots** -- Multi-level side pot creation on all-in with proper odd-chip distribution.
 - **Spectator Support** -- Join mid-game, queue for a seat, delayed hole card reveal.
@@ -91,7 +91,7 @@ Interactive phases (`*_BET`, `VOTING_*`, `LOBBY`) wait on player actions or time
 
 Phases 1-4 complete. Core game loop is fully playable: lobby, full Hold'em rounds with rule mutations, voting, showdown, and multi-round progression. Phase 5 (Tauri packaging, audio, visual polish) is next.
 
-`9.5K LOC` | `180 tests`
+`30 rule mutations` | `14-phase state machine` | `4-stage evaluation pipeline`
 
 ## Development
 

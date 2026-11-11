@@ -1,4 +1,4 @@
-# 1.3 — Colyseus Room & Schema Design
+# 1.3 Colyseus Room & Schema Design
 
 > **Status: DESIGN / ROADMAP.** This document describes the intended schema and networking design, not all of which is implemented yet.
 > **Implemented today:** authoritative server, out-of-band hole cards, 14-phase state machine, betting and pot logic, seeded RNG.
@@ -6,7 +6,7 @@
 
 ## Architecture Principle
 
-**Server is authoritative.** The server holds the complete game state — deck order, all hole cards, RNG seeds, vote tallies. Clients receive only what they're allowed to see. Clients send **actions** (intents), the server validates and applies them, and Colyseus auto-syncs the resulting state delta to all clients.
+**Server is authoritative.** The server holds the complete game state: deck order, all hole cards, RNG seeds, vote tallies. Clients receive only what they're allowed to see. Clients send **actions** (intents), the server validates and applies them, and Colyseus auto-syncs the resulting state delta to all clients.
 
 ---
 
@@ -95,7 +95,7 @@ class RuleInfo extends Schema {
 }
 ```
 
-Note: `RuleInfo` is the serializable metadata. The actual `apply()` function lives server-side only in the rule engine — clients never receive executable rule logic.
+Note: `RuleInfo` is the serializable metadata. The actual `apply()` function lives server-side only in the rule engine. Clients never receive executable rule logic.
 
 ### VotingState
 
@@ -411,7 +411,7 @@ Add to `RoomState`:
 
 ### What Spectators See
 - Everything players see EXCEPT hole cards. No `@filter()` will match a spectator's sessionId against any Player, so hole cards are never sent.
-- Community cards, pot, bets, player statuses, rule slots, voting results — all visible.
+- Community cards, pot, bets, player statuses, rule slots, voting results: all visible.
 - During showdown, spectators receive the `ShowdownMessage` broadcast with all revealed hands.
 
 ### What Spectators Cannot Do
@@ -422,7 +422,7 @@ Add to `RoomState`:
 ### Joining as Spectator
 - If a client joins while a game is in progress, they are automatically added as a spectator.
 - If a client joins during lobby phase and all seats are full, they are added as a spectator.
-- Spectators can optionally "queue" for a seat — if a player leaves or is eliminated, a queued spectator fills the seat at the next round start.
+- Spectators can optionally "queue" for a seat: if a player leaves or is eliminated, a queued spectator fills the seat at the next round start.
 
 ### Spectator Lifecycle
 ```
@@ -490,7 +490,7 @@ Server crash/restart:
 
 ### What Gets Lost on Crash
 - Sub-phase progress within a betting round (e.g., if 3 of 5 players had acted). These players re-act from the top of the betting round.
-- This is acceptable — worst case, a few players re-submit their bets. No chips or cards are lost because the last phase transition is the checkpoint.
+- This is acceptable: worst case, a few players re-submit their bets. No chips or cards are lost because the last phase transition is the checkpoint.
 
 ### Database (PostgreSQL)
 Redis is for hot state. Completed game data moves to PostgreSQL:
@@ -591,7 +591,7 @@ interface ReplayRequestMessage {
 }
 ```
 
-This goes through a separate REST API, not the Colyseus room — replays are read-only and don't need real-time sync.
+This goes through a separate REST API, not the Colyseus room. Replays are read-only and don't need real-time sync.
 
 ---
 
